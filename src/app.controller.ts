@@ -1,11 +1,16 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './modules/auth/auth.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './modules/users/user.entity';
+import { Repository } from 'typeorm';
 
 @Controller()
 export class AppController {
   constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private readonly appService: AppService,
     private readonly authService: AuthService,
   ) {}
@@ -20,6 +25,11 @@ export class AppController {
   @Get('profile')
   getProfile(@Req() req) {
     return req.user;
+  }
+
+  @Get('/:id')
+  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return await this.userRepository.findOne(id);
   }
 
   @Get()
