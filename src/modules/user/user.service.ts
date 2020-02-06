@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 export type User = any;
 
 @Injectable()
-export class UsersService {
+export class UserService {
   private readonly users: User[];
 
   constructor() {
@@ -28,5 +28,9 @@ export class UsersService {
 
   async findOne(username: string): Promise<User | undefined> {
     return this.users.find(user => user.username === username);
+  }
+
+  signUpUser(user: User) {
+    return user;
   }
 }
