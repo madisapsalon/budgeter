@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from './user.service';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Controller('user')
 export class UserController {
@@ -17,7 +18,7 @@ export class UserController {
   ) { }
 
   @Post('/signup')
-  signUp(@Body() user: User) {
+  signUp(@Body(ValidationPipe) user: AuthCredentialsDto): Promise<void> {
     return this.userService.signUpUser(user);
   }
 
