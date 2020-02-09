@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
+import { AuthValidationPipe } from './auth-validation.pipe';
 
 @Controller()
 export class AuthController {
@@ -15,11 +16,17 @@ export class AuthController {
   ) { }
 
   @Post('/signup')
-  signUp(
-    @Body(
-      new ValidationPipe({ validationError: { target: false, value: false } }))
-      user: AuthCredentialsDto): Promise<void> {
+  signUp(@Body(new AuthValidationPipe()) user: AuthCredentialsDto): Promise<void> {
     return this.authService.signUpUser(user);
+  }
+
+  @Post('/signin')
+  async signIn(@Body(new AuthValidationPipe()) authCredentials: AuthCredentialsDto) {
+    const user = await this.authService.signInUser(authCredentials);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    return this.authService.login(user);
   }
 
   // Alternative way of signin with passport local strategy
@@ -31,17 +38,5 @@ export class AuthController {
   //   }
   //   return this.authService.login(user);
   // }
-
-  @Post('/signin')
-  async signIn(
-    @Body(
-      new ValidationPipe({ validationError: { target: false, value: false } }))
-      authCredentials: AuthCredentialsDto) {
-    const user = await this.authService.signInUser(authCredentials);
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    return this.authService.login(user);
-  }
 
 }
