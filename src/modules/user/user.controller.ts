@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UnauthorizedException, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from './user.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { GetUser } from './get-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -18,7 +19,10 @@ export class UserController {
   ) { }
 
   @Post('/signup')
-  signUp(@Body(ValidationPipe) user: AuthCredentialsDto): Promise<void> {
+  signUp(
+    @Body(
+      new ValidationPipe({ validationError: { target: false, value: false } }))
+      user: AuthCredentialsDto): Promise<void> {
     return this.userService.signUpUser(user);
   }
 
@@ -28,10 +32,22 @@ export class UserController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @Post('/signin')
+  async signIn(
+    @Body(
+      new ValidationPipe({ validationError: { target: false, value: false } }))
+      authCredentials: AuthCredentialsDto) {
+    const user = await this.userService.signInUser(authCredentials);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    return this.authService.login(user);
+  }
+
+  @UseGuards(AuthGuard())
   @Get('/profile')
-  getProfile(@Req() req) {
-    return req.user;
+  getProfile(@GetUser() user) {
+    return user;
   }
 
 }
