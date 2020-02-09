@@ -7,8 +7,8 @@ import { ConflictException, InternalServerErrorException } from '@nestjs/common'
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-  async addUser(user: AuthCredentialsDto): Promise<void> {
-    const { email, password } = user;
+  async addUser(authCredentials: AuthCredentialsDto): Promise<void> {
+    const { email, password } = authCredentials;
 
     const newUser = new User();
     newUser.email = email;
@@ -23,6 +23,17 @@ export class UserRepository extends Repository<User> {
       } else {
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async validateUserPassword(authCredentials: AuthCredentialsDto) {
+    const { email, password } = authCredentials;
+    const user = await this.findOne({ email });
+
+    if (user && await user.validatePassword(password)) {
+      return { email: user.email, id: user.id };
+    } else {
+      return null;
     }
   }
 
