@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { GetUser } from './get-user.decorator';
 
 @Controller('user')
+@UseGuards(AuthGuard())
 export class UserController {
 
   constructor(
@@ -13,9 +14,8 @@ export class UserController {
     private userRepository: Repository<User>,
   ) { }
 
-  @UseGuards(AuthGuard())
   @Get('/profile')
-  getProfile(@GetUser() user) {
+  getProfile(@GetUser() user: User) {
     return user;
   }
 
