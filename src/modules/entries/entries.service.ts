@@ -16,7 +16,7 @@ export class EntriesService {
   }
 
   async getEntryById(id: string, user: User) {
-    return this.entriesRepository.getEntryById(id, user);
+    return await this.entriesRepository.getEntryById(id, user);
   }
 
   async addEntry(entry: EntryDto, user: User) {
