@@ -7,7 +7,7 @@ import { ConflictException, InternalServerErrorException } from '@nestjs/common'
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-  async addUser(authCredentials: AuthCredentialsDto): Promise<void> {
+  async addUser(authCredentials: AuthCredentialsDto): Promise<string> {
     const { email, password } = authCredentials;
 
     const newUser = new User();
@@ -17,6 +17,7 @@ export class UserRepository extends Repository<User> {
 
     try {
       await newUser.save();
+      return 'New user created';
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         throw new ConflictException(`Email (${email}) is already in use`);
@@ -31,7 +32,7 @@ export class UserRepository extends Repository<User> {
     const user = await this.findOne({ email });
 
     if (user && await user.validatePassword(password)) {
-      return { email: user.email, id: user.id };
+      return { email: user.email, id: user.id, name: user.name };
     } else {
       return null;
     }

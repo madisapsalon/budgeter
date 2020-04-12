@@ -7,7 +7,7 @@ export class Entries extends BaseEntity {
   id: string;
 
   @Column({ type: 'float' })
-  entry: number;
+  amount: number;
 
   @CreateDateColumn()
   createdAt: Date;

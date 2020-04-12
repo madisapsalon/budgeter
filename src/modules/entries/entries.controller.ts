@@ -16,13 +16,13 @@ export class EntriesController {
   ) {}
 
   @Get()
-  getUserEntries(@GetUser() user: User) {
-    return this.entriesService.getUserEntries(user);
+  getAllEntries(@GetUser() user: User) {
+    return this.entriesService.getAllEntries(user);
   }
 
   @Get('/:id')
-  async getEntryById(@Param('id') id: string,  @GetUser() user: User) {
-    return await this.entriesService.getEntryById(id, user);
+  async getSingleEntry(@Param('id') id: string,  @GetUser() user: User) {
+    return await this.entriesService.getSingleEntry(id, user);
   }
 
   @Post()

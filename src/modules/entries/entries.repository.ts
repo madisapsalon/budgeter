@@ -8,7 +8,7 @@ import { User } from '../user/user.entity';
 export class EntriesRepository extends Repository<Entries> {
   private logger = new Logger('EntriesRepository');
 
-  async getUserEntries(user: User): Promise<any> {
+  async getAllEntries(user: User): Promise<any> {
     const query = this.createQueryBuilder('entries');
     query.where('entries.userId = :userId', { userId: user.id });
     try {
@@ -23,7 +23,7 @@ export class EntriesRepository extends Repository<Entries> {
     const { amount } = entry;
 
     const newEntry = new Entries();
-    newEntry.entry = amount;
+    newEntry.amount = amount;
 
     try {
       newEntry.user = user;
@@ -35,7 +35,7 @@ export class EntriesRepository extends Repository<Entries> {
     }
   }
 
-  async getEntryById(id: string, user: User) {
+  async getSingleEntry(id: string, user: User) {
     const entry = await this.findOne({ where: { id, userId: user.id } });
     if (!entry) {
       throw new NotFoundException();
@@ -44,8 +44,8 @@ export class EntriesRepository extends Repository<Entries> {
   }
 
   async updateEntry(id: string, amount: number, user: User) {
-    const taskToUpdate = await this.getEntryById(id, user);
-    taskToUpdate.entry = amount;
+    const taskToUpdate = await this.getSingleEntry(id, user);
+    taskToUpdate.amount = amount;
     await taskToUpdate.save();
     return taskToUpdate;
   }

@@ -11,12 +11,12 @@ export class EntriesService {
     private entriesRepository: EntriesRepository,
   ) {}
 
-  async getUserEntries(user: User) {
-    return this.entriesRepository.getUserEntries(user);
+  async getAllEntries(user: User) {
+    return this.entriesRepository.getAllEntries(user);
   }
 
-  async getEntryById(id: string, user: User) {
-    return await this.entriesRepository.getEntryById(id, user);
+  async getSingleEntry(id: string, user: User) {
+    return await this.entriesRepository.getSingleEntry(id, user);
   }
 
   async addEntry(entry: EntryDto, user: User) {

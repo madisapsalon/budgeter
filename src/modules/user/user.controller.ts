@@ -14,7 +14,7 @@ export class UserController {
     private userRepository: Repository<User>,
   ) { }
 
-  @Get('/profile')
+  @Get('/')
   getProfile(@GetUser() user: User) {
     return user;
   }

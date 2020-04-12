@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  signUpUser(authCredentials: AuthCredentialsDto): Promise<void> {
+  signUpUser(authCredentials: AuthCredentialsDto): Promise<string> {
     return this.userRepository.addUser(authCredentials);
   }
 
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   async login(user) {
-    const payload = { id: user.id, email: user.email };
+    const payload = { id: user.id, email: user.email, name: user.name };
     return {
       access_token: this.jwtService.sign(payload),
     };
