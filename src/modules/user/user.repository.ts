@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { PatchUserDto } from './dto/patch-user.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -25,6 +26,20 @@ export class UserRepository extends Repository<User> {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async getUser(id: string) {
+    return await this.findOne(id);
+  }
+
+  async getUserByEmail(email: string) {
+    return await this.findOne({ email });
+  }
+
+  async updateUser(newUserData: PatchUserDto, userToUpdate: User) {
+    if (newUserData.newName) { userToUpdate.name = newUserData.newName; }
+    if (newUserData.newEmail) { userToUpdate.email = newUserData.newEmail; }
+    return await userToUpdate.save();
   }
 
   async validateUser(authCredentials: AuthCredentialsDto) {
