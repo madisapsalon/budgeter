@@ -38,10 +38,20 @@ export class UserService {
 
   async deleteUser(userId: string) {
     // TODO Before delete check if user has any entry
-    if (UserService.userHasEntries()) {
-      throw new ConflictException('Cannot delete user, because the user has entries');
+    // if (UserService.userHasEntries()) {
+    //   throw new ConflictException('Cannot delete user, because the user has entries');
+    // }
+    const deleteResult = await this.userRepository.deleteUser(userId);
+    if (deleteResult.affected === 1) {
+      return {
+        affected: deleteResult.affected,
+        message: 'The user is successfully deleted',
+      };
     }
-    return await this.userRepository.deleteUser(userId);
+    return {
+      affected: deleteResult.affected,
+      message: 'Something went wrong on delete.',
+    };
   }
 
   private static userHasEntries() {
