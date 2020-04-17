@@ -35,4 +35,16 @@ export class UserService {
     const { id, name, email, createdAt, updatedAt } = user;
     return { id, name, email, createdAt, updatedAt };
   }
+
+  async deleteUser(userId: string) {
+    // TODO Before delete check if user has any entry
+    if (UserService.userHasEntries()) {
+      throw new ConflictException('Cannot delete user, because the user has entries');
+    }
+    return await this.userRepository.deleteUser(userId);
+  }
+
+  private static userHasEntries() {
+    return true;
+  }
 }

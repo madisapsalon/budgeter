@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Patch, UseGuards, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Patch, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -34,6 +34,12 @@ export class UserController {
 
     const userId = user.id;
     return await this.userService.updateUser(newUserData, userId);
+  }
+
+  @Delete()
+  async deleteUser(@GetUser() user: User) {
+    const { id } = user;
+    return await this.userService.deleteUser(id);
   }
 
 }

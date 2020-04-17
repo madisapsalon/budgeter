@@ -57,4 +57,7 @@ export class UserRepository extends Repository<User> {
     return bcrypt.hash(password, salt);
   }
 
+  async deleteUser(userId: string) {
+    return await this.delete({ id: userId });
+  }
 }
