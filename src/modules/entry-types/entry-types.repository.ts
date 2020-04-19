@@ -21,4 +21,8 @@ export class EntryTypesRepository extends Repository<EntryTypes> {
   async getSingleEntryType(id: string, userId: string) {
     return await this.findOne({ id, userId });
   }
+
+  async updateEntryType(existingEntryType: EntryTypes) {
+    return await this.save(existingEntryType);
+  }
 }

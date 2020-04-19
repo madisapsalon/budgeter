@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntryTypesService } from './entry-types.service';
 import { GetUser } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
 import { NewEntryTypeDto } from './dto/new-entry-type.dto';
+import { PatchEntryTypeDto } from './dto/patch-entry-type.dto';
 
 @Controller('entry-types')
 @UseGuards(AuthGuard())
@@ -26,5 +27,11 @@ export class EntryTypesController {
   addEntryType(@Body() newEntryType: NewEntryTypeDto, @GetUser() user: User) {
     const { id } = user;
     return this.entryTypesService.addEntryType(newEntryType, id);
+  }
+
+  @Patch()
+  updateEntryType(@Body() entryType: PatchEntryTypeDto, @GetUser() user: User) {
+    const { id } = user;
+    return this.entryTypesService.updateEntryType(entryType, id);
   }
 }

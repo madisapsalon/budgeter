@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntryTypesRepository } from './entry-types.repository';
 import { NewEntryTypeDto } from './dto/new-entry-type.dto';
 import { EntryTypes } from './entry-types.entity';
+import { PatchEntryTypeDto } from './dto/patch-entry-type.dto';
 
 @Injectable()
 export class EntryTypesService {
@@ -29,5 +30,15 @@ export class EntryTypesService {
       throw new NotFoundException(`Could not found entry type with id ${entryTypeId}`);
     }
     return entryType;
+  }
+
+  async updateEntryType(entryType: PatchEntryTypeDto, userId: string) {
+    const { id, name, description } = entryType;
+    const existingEntryType = await this.getSingleEntryType(id, userId);
+
+    existingEntryType.name = name ? name : existingEntryType.name;
+    existingEntryType.description = description ? description : existingEntryType.description;
+
+    return this.repository.updateEntryType(existingEntryType);
   }
 }
