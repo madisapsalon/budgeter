@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntryTypesRepository } from './entry-types.repository';
 import { NewEntryTypeDto } from './dto/new-entry-type.dto';
 import { EntryTypes } from './entry-types.entity';
@@ -21,5 +21,13 @@ export class EntryTypesService {
     entryType.userId = userId;
 
     return this.repository.addEntryType(entryType);
+  }
+
+  async getSingleEntryType(entryTypeId: string, userId: string) {
+    const entryType = await this.repository.getSingleEntryType(entryTypeId, userId);
+    if (!entryType) {
+      throw new NotFoundException(`Could not found entry type with id ${entryTypeId}`);
+    }
+    return entryType;
   }
 }

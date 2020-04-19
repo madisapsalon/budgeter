@@ -17,4 +17,8 @@ export class EntryTypesRepository extends Repository<EntryTypes> {
       throw new InternalServerErrorException();
     }
   }
+
+  async getSingleEntryType(id: string, userId: string) {
+    return await this.findOne({ id, userId });
+  }
 }

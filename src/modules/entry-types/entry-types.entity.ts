@@ -10,7 +10,7 @@ export class EntryTypes extends BaseEntity {
   name: string;
 
   @Column()
-  description: string;
+  description: string | null;
 
   @ManyToOne(type => User, user => user.entryTypes, { eager: false })
   user: User;

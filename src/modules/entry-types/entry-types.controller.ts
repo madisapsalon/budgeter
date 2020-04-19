@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntryTypesService } from './entry-types.service';
 import { GetUser } from '../user/get-user.decorator';
@@ -15,6 +15,11 @@ export class EntryTypesController {
   getUserEntryTypes(@GetUser() user: User) {
     const { id } = user;
     return this.entryTypesService.getUserEntryTypes(id);
+  }
+
+  @Get('/:id')
+  getSingleEntryType(@Param('id') id: string, @GetUser() user: User) {
+    return this.entryTypesService.getSingleEntryType(id, user.id);
   }
 
   @Post()
