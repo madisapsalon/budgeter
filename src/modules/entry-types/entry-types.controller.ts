@@ -1,8 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntryTypesService } from './entry-types.service';
 import { GetUser } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
+import { NewEntryTypeDto } from './dto/new-entry-type.dto';
 
 @Controller('entry-types')
 @UseGuards(AuthGuard())
@@ -14,5 +15,11 @@ export class EntryTypesController {
   getUserEntryTypes(@GetUser() user: User) {
     const { id } = user;
     return this.entryTypesService.getUserEntryTypes(id);
+  }
+
+  @Post()
+  addEntryType(@Body() newEntryType: NewEntryTypeDto, @GetUser() user: User) {
+    const { id } = user;
+    return this.entryTypesService.addEntryType(newEntryType, id);
   }
 }

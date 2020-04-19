@@ -1,12 +1,20 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { EntryTypes } from './entry-types.entity';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @EntityRepository(EntryTypes)
 export class EntryTypesRepository extends Repository<EntryTypes> {
 
   async getUserEntryTypes(userId: string) {
-    const entryTypes = await this.find({ userId });
+    return await this.find({ userId });
+  }
 
-    return entryTypes;
+  async addEntryType(entryType: EntryTypes) {
+    try {
+      await entryType.save();
+      return entryType;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }

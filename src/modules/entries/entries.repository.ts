@@ -20,13 +20,13 @@ export class EntriesRepository extends Repository<Entries> {
   }
 
   async addEntry(entry: EntryDto, user: User): Promise<any> {
-    const { amount } = entry;
-
-    const newEntry = new Entries();
-    newEntry.amount = amount;
-
     try {
+      const { amount } = entry;
+
+      const newEntry = new Entries();
+      newEntry.amount = amount;
       newEntry.user = user;
+
       await newEntry.save();
       return newEntry;
     } catch (error) {
