@@ -1,5 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { User } from '../user/user.entity';
+import { EntryTypes } from '../entry-types/entry-types.entity';
 
 @Entity()
 export class Entries extends BaseEntity {
@@ -20,4 +21,7 @@ export class Entries extends BaseEntity {
 
   @Column()
   userId: string;
+
+  @ManyToOne(type => EntryTypes, entryTypes => entryTypes, { eager: true })
+  entryTypes: EntryTypes;
 }

@@ -1,6 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Entries } from '../entries/entries.entity';
+import { EntryTypes } from '../entry-types/entry-types.entity';
 
 @Entity()
 @Unique(['email'])
@@ -22,6 +23,9 @@ export class User extends BaseEntity {
 
   @OneToMany(type => Entries, entries => entries.user, { eager: true })
   entries: Entries[];
+
+  @OneToMany(type => EntryTypes, entryTypes => entryTypes.user, { eager: true })
+  entryTypes: EntryTypes[];
 
   @CreateDateColumn()
   createdAt: Date;

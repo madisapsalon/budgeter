@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, InternalServerErrorException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntriesService } from './entries.service';
 import { GetUser } from '../user/get-user.decorator';
@@ -9,11 +9,7 @@ import { EntryDto } from './dto/entry.dto';
 @UseGuards(AuthGuard())
 export class EntriesController {
 
-  constructor(
-    // @InjectRepository(Entries)
-    // private entriesRepository: Repository<Entries>,
-    private entriesService: EntriesService,
-  ) {}
+  constructor(private entriesService: EntriesService) {}
 
   @Get()
   getAllEntries(@GetUser() user: User) {

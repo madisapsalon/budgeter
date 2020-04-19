@@ -6,6 +6,8 @@ import { EntriesModule } from './modules/entries/entries.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './modules/user/user.entity';
 import { Entries } from './modules/entries/entries.entity';
+import { EntryTypesModule } from './modules/entry-types/entry-types.module';
+import { EntryTypes } from './modules/entry-types/entry-types.entity';
 
 @Module({
   imports: [
@@ -16,10 +18,10 @@ import { Entries } from './modules/entries/entries.entity';
       username: 'root',
       password: 'password',
       database: 'budgeter_DB',
-      entities: [User, Entries],
+      entities: [User, Entries, EntryTypes],
       synchronize: false,
     }),
-    UserModule, EntriesModule,
+    UserModule, EntriesModule, EntryTypesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
