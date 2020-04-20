@@ -35,8 +35,8 @@ export class EntriesRepository extends Repository<Entries> {
     }
   }
 
-  async getSingleEntry(id: string, user: User) {
-    const entry = await this.findOne({ where: { id, userId: user.id } });
+  async getSingleEntry(entryId: string, user: User) {
+    const entry = await this.findOne({ where: { id: entryId, userId: user.id } });
     if (!entry) {
       this.logger.error('Could not find single entry');
       throw new NotFoundException();

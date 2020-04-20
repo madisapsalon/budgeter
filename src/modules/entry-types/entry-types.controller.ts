@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntryTypesService } from './entry-types.service';
-import { GetUser } from '../user/get-user.decorator';
+import { GetUser, GetUserId } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
 import { NewEntryTypeDto } from './dto/new-entry-type.dto';
 import { PatchEntryTypeDto } from './dto/patch-entry-type.dto';
@@ -13,25 +13,22 @@ export class EntryTypesController {
   constructor(private entryTypesService: EntryTypesService) {}
 
   @Get()
-  getUserEntryTypes(@GetUser() user: User) {
-    const { id } = user;
+  getUserEntryTypes(@GetUserId() id: string) {
     return this.entryTypesService.getUserEntryTypes(id);
   }
 
   @Get('/:id')
-  getSingleEntryType(@Param('id') id: string, @GetUser() user: User) {
-    return this.entryTypesService.getSingleEntryType(id, user.id);
+  getSingleEntryType(@Param('id') id: string, @GetUserId() userId: string) {
+    return this.entryTypesService.getSingleEntryType(id, userId);
   }
 
   @Post()
-  addEntryType(@Body() newEntryType: NewEntryTypeDto, @GetUser() user: User) {
-    const { id } = user;
+  addEntryType(@Body() newEntryType: NewEntryTypeDto, @GetUserId() id: string) {
     return this.entryTypesService.addEntryType(newEntryType, id);
   }
 
   @Patch()
-  updateEntryType(@Body() entryType: PatchEntryTypeDto, @GetUser() user: User) {
-    const { id } = user;
+  updateEntryType(@Body() entryType: PatchEntryTypeDto, @GetUserId() id: string) {
     return this.entryTypesService.updateEntryType(entryType, id);
   }
 }

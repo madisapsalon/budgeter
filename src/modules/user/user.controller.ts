@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import { GetUser } from './get-user.decorator';
+import { GetUser, GetUserId } from './get-user.decorator';
 import { PatchUserDto } from './dto/patch-user.dto';
 import { UserService } from './user.service';
 
@@ -18,27 +18,24 @@ export class UserController {
   ) { }
 
   @Get()
-  getUser(@GetUser() user: User) {
-    const { id } = user;
+  getUser(@GetUserId() id: string) {
     return this.userService.getUser(id);
   }
 
   @Patch()
   async updateUser(
     @Body(new ValidationPipe()) newUserData: PatchUserDto,
-    @GetUser() user: User,
+    @GetUserId() id: string,
   ) {
     if (!newUserData.newEmail && !newUserData.newName) {
       throw new BadRequestException('One of body properties is expected: newEmail or newName');
     }
 
-    const userId = user.id;
-    return await this.userService.updateUser(newUserData, userId);
+    return await this.userService.updateUser(newUserData, id);
   }
 
   @Delete()
-  async deleteUser(@GetUser() user: User) {
-    const { id } = user;
+  async deleteUser(@GetUserId() id: string) {
     return await this.userService.deleteUser(id);
   }
 

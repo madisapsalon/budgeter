@@ -29,14 +29,4 @@ export class AuthController {
     return this.authService.login(user);
   }
 
-  // Alternative way of signin with passport local strategy
-  // @UseGuards(AuthGuard('local'))
-  // @Post('/signin')
-  // async signIn(@Req() user) {
-  //   if (!user) {
-  //     throw new UnauthorizedException('Invalid credentials');
-  //   }
-  //   return this.authService.login(user);
-  // }
-
 }
