@@ -1,5 +1,4 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
-import { User } from '../user/user.entity';
 import { EntriesRepository } from './entries.repository';
 import { EntryDto } from './dto/entry.dto';
 import { Entries } from './entries.entity';
@@ -14,8 +13,12 @@ export class EntriesService {
     private entryTypesService: EntryTypesService,
   ) {}
 
-  async getAllEntries(user: User) {
-    return this.entriesRepository.getAllEntries(user);
+  async getAllEntries(userId: string) {
+    const entries = await this.entriesRepository.getAllEntries(userId);
+    if (entries && entries.length) {
+      return entries;
+    }
+    throw new NotFoundException();
   }
 
   async getSingleEntry(id: string, userId: string) {

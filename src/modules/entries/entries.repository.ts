@@ -1,22 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Entries } from './entries.entity';
-import { EntryDto } from './dto/entry.dto';
-import { InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
-import { User } from '../user/user.entity';
+import { Logger } from '@nestjs/common';
 
 @EntityRepository(Entries)
 export class EntriesRepository extends Repository<Entries> {
-  private logger = new Logger('EntriesRepository');
 
-  async getAllEntries(user: User): Promise<any> {
-    const query = this.createQueryBuilder('entries');
-    query.where('entries.userId = :userId', { userId: user.id });
-    try {
-      return await query.getMany();
-    } catch (error) {
-      this.logger.error(`Problem finding user entries ${JSON.stringify(user)}`, error.stack);
-      throw new NotFoundException();
-    }
+  async getAllEntries(userId: string) {
+    return this.find({ userId });
   }
 
   async addEntry(entry: Entries) {
