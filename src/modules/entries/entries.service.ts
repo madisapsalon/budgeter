@@ -3,6 +3,7 @@ import { User } from '../user/user.entity';
 import { EntriesRepository } from './entries.repository';
 import { EntryDto } from './dto/entry.dto';
 import { Entries } from './entries.entity';
+import { EntryTypesService } from '../entry-types/entry-types.service';
 
 @Injectable()
 export class EntriesService {
@@ -10,6 +11,7 @@ export class EntriesService {
 
   constructor(
     private entriesRepository: EntriesRepository,
+    private entryTypesService: EntryTypesService,
   ) {}
 
   async getAllEntries(user: User) {
@@ -26,9 +28,13 @@ export class EntriesService {
   }
 
   async addEntry(entry: EntryDto, userId: string) {
-    const { amount } = entry;
+    const { amount, entryTypeId } = entry;
     const newEntry = new Entries();
+
+    const entryType = entryTypeId ? await this.entryTypesService.getSingleEntryType(entryTypeId, userId) : null;
+
     newEntry.amount = amount;
+    newEntry.entryTypes = entryType;
     newEntry.userId = userId;
     try {
       return await this.entriesRepository.addEntry(newEntry);
