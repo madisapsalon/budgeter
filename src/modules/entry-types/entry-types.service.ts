@@ -41,4 +41,12 @@ export class EntryTypesService {
 
     return this.repository.updateEntryType(existingEntryType);
   }
+
+  async deleteEntryType(id: string, userId: string) {
+    const deletedEntryType = await this.repository.delete({ id, userId });
+    if (!deletedEntryType.affected) {
+      throw new NotFoundException(`Could not find entry type with id ${id}`);
+    }
+    return 'Entry type successfully deleted';
+  }
 }

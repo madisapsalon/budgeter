@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntryTypesService } from './entry-types.service';
 import { GetUser, GetUserId } from '../user/get-user.decorator';
@@ -30,5 +30,10 @@ export class EntryTypesController {
   @Patch()
   updateEntryType(@Body() entryType: PatchEntryTypeDto, @GetUserId() id: string) {
     return this.entryTypesService.updateEntryType(entryType, id);
+  }
+
+  @Delete()
+  deleteEntryType(@Body('id') id: string, @GetUserId() userId: string) {
+    return this.entryTypesService.deleteEntryType(id, userId);
   }
 }
