@@ -19,42 +19,22 @@ export class EntriesRepository extends Repository<Entries> {
     }
   }
 
-  async addEntry(entry: EntryDto, user: User): Promise<any> {
-    try {
-      const { amount } = entry;
-
-      const newEntry = new Entries();
-      newEntry.amount = amount;
-      newEntry.user = user;
-
-      await newEntry.save();
-      return newEntry;
-    } catch (error) {
-      this.logger.error(`Cannot add new entry. ${JSON.stringify(entry)}`, error.stack);
-      throw new InternalServerErrorException();
-    }
+  async addEntry(entry: Entries) {
+    return await entry.save();
   }
 
-  async getSingleEntry(entryId: string, user: User) {
-    const entry = await this.findOne({ where: { id: entryId, userId: user.id } });
-    if (!entry) {
-      this.logger.error('Could not find single entry');
-      throw new NotFoundException();
-    }
-    return entry;
+  async getSingleEntry(id: string, userId: string) {
+    return await this.findOne({ id, userId });
   }
 
-  async updateEntry(id: string, amount: number, user: User) {
-    const taskToUpdate = await this.getSingleEntry(id, user);
-    taskToUpdate.amount = amount;
-    await taskToUpdate.save();
-    return taskToUpdate;
+  async updateEntry(id: string, amount: number, userId: string) {
+    const entryToUpdate = await this.getSingleEntry(id, userId);
+    entryToUpdate.amount = amount;
+    await entryToUpdate.save();
+    return entryToUpdate;
   }
 
-  async deleteEntry(id: string, user: User) {
-    const result = await this.delete({ id, userId: user.id });
-    if (result.affected === 0) {
-      throw new NotFoundException();
-    }
+  async deleteEntry(id: string, userId: string) {
+    return await this.delete({ id, userId });
   }
 }

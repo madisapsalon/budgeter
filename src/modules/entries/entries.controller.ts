@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EntriesService } from './entries.service';
-import { GetUser } from '../user/get-user.decorator';
+import { GetUser, GetUserId } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
 import { EntryDto } from './dto/entry.dto';
 
@@ -17,25 +17,25 @@ export class EntriesController {
   }
 
   @Get('/:id')
-  async getSingleEntry(@Param('id') id: string,  @GetUser() user: User) {
-    return await this.entriesService.getSingleEntry(id, user);
+  async getSingleEntry(@Param('id') id: string,  @GetUserId() userId: string) {
+    return await this.entriesService.getSingleEntry(id, userId);
   }
 
   @Post()
-  addEntry(@Body() entry: EntryDto, @GetUser() user: User): Promise<any> {
-    return this.entriesService.addEntry(entry, user);
+  addEntry(@Body() entry: EntryDto, @GetUserId() userId: string) {
+    return this.entriesService.addEntry(entry, userId);
   }
 
   @Patch('/:id')
   async updateEntry(
     @Param('id') id: string,
     @Body('amount') amount: number,
-    @GetUser() user: User) {
-    return this.entriesService.updateEntry(id, amount, user);
+    @GetUserId() userId: string) {
+    return this.entriesService.updateEntry(id, amount, userId);
   }
 
-  @Delete('/:id')
-  async deleteEntry(@Param('id') id: string, @GetUser() user: User) {
-    return this.entriesService.deleteEntry(id, user);
+  @Delete()
+  deleteEntry(@Body('id') id: string, @GetUserId() userId: string) {
+    return this.entriesService.deleteEntry(id, userId);
   }
 }
