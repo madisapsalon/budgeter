@@ -9,7 +9,7 @@ export class EntryTypesService {
 
   constructor(private repository: EntryTypesRepository) {}
 
-  getUserEntryTypes(userId: string) {
+  async getUserEntryTypes(userId: string) {
     return this.repository.getUserEntryTypes(userId);
   }
 
@@ -36,8 +36,8 @@ export class EntryTypesService {
     const { id, name, description } = entryType;
     const existingEntryType = await this.getSingleEntryType(id, userId);
 
-    existingEntryType.name = name ? name : existingEntryType.name;
-    existingEntryType.description = description ? description : existingEntryType.description;
+    existingEntryType.name = name;
+    existingEntryType.description = description;
 
     return this.repository.updateEntryType(existingEntryType);
   }
