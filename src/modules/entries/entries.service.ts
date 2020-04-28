@@ -15,7 +15,7 @@ export class EntriesService {
 
   async getAllEntries(userId: string) {
     const entries = await this.entriesRepository.getAllEntries(userId);
-    if (entries && entries.length) {
+    if (entries) {
       return entries;
     }
     throw new NotFoundException();
