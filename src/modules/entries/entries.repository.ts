@@ -27,21 +27,7 @@ export class EntriesRepository extends Repository<Entries> {
     return await this.delete({ id, userId });
   }
 
-  async getEntriesFromDate(startDate: string, userId: string) {
-    return await this.find({
-      where: {
-        userId,
-        createdAt: MoreThanOrEqual(startDate),
-      },
-    });
-  }
-
-  async getEntriesToDate(endDate: string, userId: string) {
-    return await this.find({
-      where: {
-        userId,
-        createdAt: LessThanOrEqual(endDate),
-      },
-    });
+  async getEntriesByOptions(options) {
+    return await this.find({ where: options });
   }
 }

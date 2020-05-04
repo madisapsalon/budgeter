@@ -5,6 +5,7 @@ import { Entries } from './entries.entity';
 import { EntryTypesService } from '../entry-types/entry-types.service';
 import { EntriesBodyDto } from './dto/entries-body.dto';
 import * as moment from 'moment';
+import { Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class EntriesService {
@@ -61,16 +62,24 @@ export class EntriesService {
     return 'Entry is successfully deleted';
   }
 
-  async getEntriesByDate(entries: EntriesBodyDto, userId: string) {
-    const { startDate, endDate } = entries;
+  async getEntriesByOptions(entries: EntriesBodyDto, userId: string) {
+    const { startDate, endDate, entryTypeId } = entries;
     const startDateFormatted = moment(startDate).format();
     const endDateFormatted = endDate ? moment(`${endDate} 23:59:59.999`).format() : null;
 
-    if (startDate) {
-      return await this.entriesRepository.getEntriesFromDate(startDateFormatted, userId);
+    const options: any = { userId };
+    if (startDate && endDate) {
+      options.createdAt = Between(startDateFormatted, endDateFormatted);
+    } else if (startDate) {
+      options.createdAt = MoreThanOrEqual(startDateFormatted);
+    } else if (endDate) {
+      options.createdAt = LessThanOrEqual(endDateFormatted);
     }
-    if (endDate) {
-      return await this.entriesRepository.getEntriesToDate(endDateFormatted, userId);
+
+    if (entryTypeId) {
+      options.entryTypes = { id: entryTypeId };
     }
+
+    return this.entriesRepository.getEntriesByOptions(options);
   }
 }

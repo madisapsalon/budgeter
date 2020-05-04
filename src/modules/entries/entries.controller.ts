@@ -4,6 +4,7 @@ import { EntriesService } from './entries.service';
 import { GetUserId } from '../user/get-user.decorator';
 import { EntryDto } from './dto/entry.dto';
 import { EntriesBodyDto } from './dto/entries-body.dto';
+import { options } from 'tsconfig-paths/lib/options';
 
 @Controller('entries')
 @UseGuards(AuthGuard())
@@ -13,8 +14,8 @@ export class EntriesController {
 
   @Get()
   getAllEntries(@Body() entries: EntriesBodyDto, @GetUserId() userId: string) {
-    if (entries.startDate || entries.endDate) {
-      return this.entriesService.getEntriesByDate(entries, userId);
+    if (entries) {
+      return this.entriesService.getEntriesByOptions(entries, userId);
     }
     return this.entriesService.getAllEntries(userId);
   }
