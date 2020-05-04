@@ -1,18 +1,18 @@
 import { IsISO8601, IsOptional, IsUUID } from 'class-validator';
 
-export class EntriesBodyDto {
+export class EntryOptionsDto {
   @IsOptional()
-  amount: number;
+  amount?: number;
 
   @IsOptional()
   @IsISO8601()
-  startDate: string;
+  startDate?: string;
 
   @IsOptional()
   @IsISO8601()
-  endDate: string;
+  endDate?: string;
 
   @IsOptional()
   @IsUUID()
-  entryTypeId: string;
+  entryTypeId?: string;
 }

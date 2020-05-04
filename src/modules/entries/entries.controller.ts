@@ -3,8 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { EntriesService } from './entries.service';
 import { GetUserId } from '../user/get-user.decorator';
 import { EntryDto } from './dto/entry.dto';
-import { EntriesBodyDto } from './dto/entries-body.dto';
-import { options } from 'tsconfig-paths/lib/options';
+import { EntryOptionsDto } from './dto/entries-body.dto';
 
 @Controller('entries')
 @UseGuards(AuthGuard())
@@ -13,9 +12,9 @@ export class EntriesController {
   constructor(private entriesService: EntriesService) {}
 
   @Get()
-  getAllEntries(@Body() entries: EntriesBodyDto, @GetUserId() userId: string) {
-    if (entries) {
-      return this.entriesService.getEntriesByOptions(entries, userId);
+  getAllEntries(@Body() entryOptions: EntryOptionsDto, @GetUserId() userId: string) {
+    if (entryOptions) {
+      return this.entriesService.getEntriesByOptions(entryOptions, userId);
     }
     return this.entriesService.getAllEntries(userId);
   }

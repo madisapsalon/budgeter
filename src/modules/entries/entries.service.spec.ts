@@ -4,7 +4,6 @@ import { EntriesRepository } from './entries.repository';
 import { EntryTypesService } from '../entry-types/entry-types.service';
 import { EntryTypesRepository } from '../entry-types/entry-types.repository';
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Entries } from './entries.entity';
 
 const userId = '123';
 const mockEntriesRepository = () => ({
@@ -13,6 +12,7 @@ const mockEntriesRepository = () => ({
   updateEntry: jest.fn(),
   deleteEntry: jest.fn(),
   addEntry: jest.fn(),
+  getEntriesByOptions: jest.fn(),
 });
 
 const mockEntryTypesRepository = () => ({});
@@ -141,6 +141,66 @@ describe('EntriesService', () => {
     it('should return NotFoundException if an entry could not been deleted', () => {
       entriesRepository.deleteEntry.mockResolvedValue({ affected: 0 });
       expect(entriesService.deleteEntry('12', userId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getEntriesByOptions', () => {
+    const entries = [
+      {
+        createdAt: '2020-01-01',
+        amount: 20,
+      },
+      {
+        createdAt: '2020-01-10',
+        amount: 10,
+      },
+    ];
+
+    it('should return entries between dates', async () => {
+      const entryOptions = {
+        startDate: '2020-01-01',
+        endDate: '2020-01-10',
+      };
+
+      entriesRepository.getEntriesByOptions.mockResolvedValue(entries);
+      expect(entriesRepository.getEntriesByOptions).not.toHaveBeenCalled();
+      const result = await entriesService.getEntriesByOptions(entryOptions, userId);
+      expect(entriesRepository.getEntriesByOptions).toHaveBeenCalled();
+      expect(result).toEqual(entries);
+    });
+
+    it('should return entries from date', async () => {
+      const entryOptions = {
+        startDate: '2020-01-01',
+      };
+
+      entriesRepository.getEntriesByOptions.mockResolvedValue(entries);
+      expect(entriesRepository.getEntriesByOptions).not.toHaveBeenCalled();
+      const result = await entriesService.getEntriesByOptions(entryOptions, userId);
+      expect(entriesRepository.getEntriesByOptions).toHaveBeenCalled();
+      expect(result).toEqual(entries);
+    });
+
+    it('should return entries to date', async () => {
+      const entryOptions = {
+        endDate: '2020-01-01',
+      };
+      entriesRepository.getEntriesByOptions.mockResolvedValue(entries);
+      expect(entriesRepository.getEntriesByOptions).not.toHaveBeenCalled();
+      const result = await entriesService.getEntriesByOptions(entryOptions, userId);
+      expect(entriesRepository.getEntriesByOptions).toHaveBeenCalled();
+      expect(result).toEqual(entries);
+    });
+
+    it('should return entries with a type', async () => {
+      const entryOptions = {
+        entryTypeId: 'q1w2-e3r4',
+      };
+      entriesRepository.getEntriesByOptions.mockResolvedValue(entries);
+      expect(entriesRepository.getEntriesByOptions).not.toHaveBeenCalled();
+      const result = await entriesService.getEntriesByOptions(entryOptions, userId);
+      expect(entriesRepository.getEntriesByOptions).toHaveBeenCalled();
+      expect(result).toEqual(entries);
     });
   });
 });

@@ -75,4 +75,18 @@ describe('EntriesRepository', () => {
       expect(result).toEqual(deletedResult);
     });
   });
+
+  describe('getEntriesByOptions', () => {
+    it('should return entries list', async () => {
+      const entryOptions = {
+        startDate: '2020-01-01',
+      };
+      repository.find = jest.fn();
+      const entries = [{ id: '1' }, { id: '2' }];
+      repository.find.mockResolvedValue(entries);
+      const result = await repository.getEntriesByOptions(entryOptions);
+      expect(repository.find).toHaveBeenCalledWith({ where: entryOptions });
+      expect(result).toEqual(entries);
+    });
+  });
 });

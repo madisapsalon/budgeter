@@ -3,9 +3,9 @@ import { EntriesRepository } from './entries.repository';
 import { EntryDto } from './dto/entry.dto';
 import { Entries } from './entries.entity';
 import { EntryTypesService } from '../entry-types/entry-types.service';
-import { EntriesBodyDto } from './dto/entries-body.dto';
 import * as moment from 'moment';
 import { Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
+import { EntryOptionsDto } from './dto/entries-body.dto';
 
 @Injectable()
 export class EntriesService {
@@ -62,8 +62,8 @@ export class EntriesService {
     return 'Entry is successfully deleted';
   }
 
-  async getEntriesByOptions(entries: EntriesBodyDto, userId: string) {
-    const { startDate, endDate, entryTypeId } = entries;
+  async getEntriesByOptions(entryOptions: EntryOptionsDto, userId: string) {
+    const { startDate, endDate, entryTypeId } = entryOptions;
     const startDateFormatted = moment(startDate).format();
     const endDateFormatted = endDate ? moment(`${endDate} 23:59:59.999`).format() : null;
 
