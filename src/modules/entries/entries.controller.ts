@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { EntriesService } from './entries.service';
 import { GetUserId } from '../user/get-user.decorator';
 import { EntryDto } from './dto/entry.dto';
+import { EntriesBodyDto } from './dto/entries-body.dto';
 
 @Controller('entries')
 @UseGuards(AuthGuard())
@@ -11,7 +12,10 @@ export class EntriesController {
   constructor(private entriesService: EntriesService) {}
 
   @Get()
-  getAllEntries(@GetUserId() userId: string) {
+  getAllEntries(@Body() entries: EntriesBodyDto, @GetUserId() userId: string) {
+    if (entries.startDate || entries.endDate) {
+      return this.entriesService.getEntriesByDate(entries, userId);
+    }
     return this.entriesService.getAllEntries(userId);
   }
 

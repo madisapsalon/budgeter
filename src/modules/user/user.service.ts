@@ -43,10 +43,7 @@ export class UserService {
     // }
     const deleteResult = await this.userRepository.deleteUser(userId);
     if (deleteResult.affected === 1) {
-      return {
-        affected: deleteResult.affected,
-        message: 'The user is successfully deleted',
-      };
+      return { message: 'The user is successfully deleted' };
     }
     return {
       affected: deleteResult.affected,
