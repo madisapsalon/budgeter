@@ -6,6 +6,7 @@ import { EntryTypesService } from '../entry-types/entry-types.service';
 import * as moment from 'moment';
 import { Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { EntryOptionsDto } from './dto/entries-body.dto';
+import { EntryPatchDto } from './dto/entry-patch.dto';
 
 @Injectable()
 export class EntriesService {
@@ -50,8 +51,17 @@ export class EntriesService {
     }
   }
 
-  updateEntry(id: string, amount: number, userId: string) {
-    return this.entriesRepository.updateEntry(id, amount, userId);
+  async updateEntry(entryPatch: EntryPatchDto, userId: string) {
+    const { id, amount, entryTypeId } = entryPatch;
+    const entryToUpdate = await this.entriesRepository.getSingleEntry(id, userId);
+    const newEntryType = entryTypeId ? await this.entryTypesService.getSingleEntryType(entryTypeId, userId) : null;
+    if (amount) {
+      entryToUpdate.amount = amount;
+    }
+    if (newEntryType) {
+      entryToUpdate.entryTypes = newEntryType;
+    }
+    return this.entriesRepository.updateEntry(entryToUpdate);
   }
 
   async deleteEntry(id: string, userId: string) {

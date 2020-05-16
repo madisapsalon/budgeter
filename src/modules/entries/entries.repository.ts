@@ -1,4 +1,4 @@
-import { EntityRepository, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { Entries } from './entries.entity';
 
 @EntityRepository(Entries)
@@ -16,11 +16,8 @@ export class EntriesRepository extends Repository<Entries> {
     return await this.findOne({ id, userId });
   }
 
-  async updateEntry(id: string, amount: number, userId: string) {
-    const entryToUpdate = await this.getSingleEntry(id, userId);
-    entryToUpdate.amount = amount;
-    await entryToUpdate.save();
-    return entryToUpdate;
+  async updateEntry(entryToUpdate: Entries) {
+    return await entryToUpdate.save();
   }
 
   async deleteEntry(id: string, userId: string) {

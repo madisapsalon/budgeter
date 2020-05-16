@@ -4,6 +4,7 @@ import { EntriesService } from './entries.service';
 import { GetUserId } from '../user/get-user.decorator';
 import { EntryDto } from './dto/entry.dto';
 import { EntryOptionsDto } from './dto/entries-body.dto';
+import { EntryPatchDto } from './dto/entry-patch.dto';
 
 @Controller('entries')
 @UseGuards(AuthGuard())
@@ -29,12 +30,9 @@ export class EntriesController {
     return this.entriesService.addEntry(entry, userId);
   }
 
-  @Patch('/:id')
-  async updateEntry(
-    @Param('id') id: string,
-    @Body('amount') amount: number,
-    @GetUserId() userId: string) {
-    return this.entriesService.updateEntry(id, amount, userId);
+  @Patch()
+  async updateEntry(@Body() entryPatch: EntryPatchDto, @GetUserId() userId: string) {
+    return this.entriesService.updateEntry(entryPatch, userId);
   }
 
   @Delete()

@@ -49,19 +49,16 @@ describe('EntriesRepository', () => {
   });
 
   describe('updateEntry', () => {
-    it('should return updated entry', async () => {
+    it.only('should return updated entry', async () => {
       const updatedEntry = { id: '1', amount: 200 };
       const entryToUpdate = new Entries();
       entryToUpdate.id = '1';
       entryToUpdate.amount = 100;
       entryToUpdate.save = jest.fn().mockResolvedValue(updatedEntry);
-
-      repository.getSingleEntry = jest.fn().mockResolvedValue(entryToUpdate);
       expect(entryToUpdate.save).not.toHaveBeenCalled();
-      const result = await repository.updateEntry('1', 200, userId);
-      expect(repository.getSingleEntry).toHaveBeenCalledWith('1', userId);
+      const result = await repository.updateEntry(entryToUpdate);
       expect(entryToUpdate.save).toHaveBeenCalled();
-      expect(result).toEqual(entryToUpdate);
+      expect(result).toEqual(updatedEntry);
     });
   });
 
