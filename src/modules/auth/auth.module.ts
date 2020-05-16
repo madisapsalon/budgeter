@@ -4,12 +4,14 @@ import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
 import { AuthController } from './auth.controller';
 import { EntriesModule } from '../entries/entries.module';
+import * as config from 'config';
+
+const jwtConfig = config.get('jwt');
 
 @Module({
   imports: [
@@ -18,8 +20,8 @@ import { EntriesModule } from '../entries/entries.module';
     forwardRef(() => EntriesModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      secret: process.env.JWT_SECRET || jwtConfig.secret,
+      signOptions: { expiresIn: jwtConfig.expires },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

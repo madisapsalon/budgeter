@@ -8,18 +8,21 @@ import { User } from './modules/user/user.entity';
 import { Entries } from './modules/entries/entries.entity';
 import { EntryTypesModule } from './modules/entry-types/entry-types.module';
 import { EntryTypes } from './modules/entry-types/entry-types.entity';
+import * as config from 'config';
+
+const dbConfig = config.get('db');
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: '127.0.0.1',
-      port: 3306,
-      username: 'root',
-      password: 'password',
-      database: 'budgeter_DB',
+      type: dbConfig.type,
+      host: process.env.DB_HOST || dbConfig.host,
+      port: process.env.DB_PORT || dbConfig.port,
+      username: process.env.DB_USERNAME || dbConfig.username,
+      password: process.env.DB_PASSWORD || dbConfig.password,
+      database: process.env.DB_NAME || dbConfig.database,
       entities: [User, Entries, EntryTypes],
-      synchronize: false,
+      synchronize: process.env.TYPEORM_SYNC || dbConfig.synchronize,
     }),
     UserModule, EntriesModule, EntryTypesModule,
   ],
