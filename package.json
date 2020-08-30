@@ -1,9 +1,13 @@
 {
   "name": "budgeter",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Example REST API on Nest.js",
+  "author": "Madis A.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/madisapsalon/budgeter"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
