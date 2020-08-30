@@ -2,6 +2,8 @@
 
 Example API written with [Nest](https://github.com/nestjs/nest) framework and uses MySQL database.
 
+Example API runs here https://budgeter-api.herokuapp.com/
+
 ## Installation
 
 ```bash
