@@ -1,0 +1,717 @@
+{
+	"info": {
+		"_postman_id": "ce6e6c95-f9e3-44e3-91ac-be8d1e638f20",
+		"name": "Budgeter API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "/signup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "arnold@budgeter.ee",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "q1w2e3r4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/signup",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/signin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ef88e4b5-2d56-47e4-9ad4-53cce13778cd",
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"pm.environment.set('access_token', data.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "bruce@budgeter.ee",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "q1w2e3r4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/signin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "/user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "31991967-5d71-4150-b10f-51c7297b6c1b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "newEmail",
+									"value": "uus.madis@test.uu",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "newName",
+									"value": "uus madis",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Entries",
+			"item": [
+				{
+					"name": "/entries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "amount",
+									"value": "12355",
+									"type": "text"
+								},
+								{
+									"key": "entryTypeId",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entries",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/entries",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entries by date",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "startDate",
+									"value": "2020-05-06",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "2020-04-20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entries",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entries by entry type",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "entryTypeId",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entries",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entries/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "257da958-8cd7-439a-a67f-ebd7fb08342b",
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"pm.environment.set('entry', data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/entries/10d44ce0-b94e-4c0c-b8fc-0274befb9804",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries",
+								"10d44ce0-b94e-4c0c-b8fc-0274befb9804"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "amount",
+									"value": "200",
+									"type": "text"
+								},
+								{
+									"key": "entryTypeId",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entries/10d44ce0-b94e-4c0c-b8fc-0274befb9804",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries",
+								"10d44ce0-b94e-4c0c-b8fc-0274befb9804"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "{{entry}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entries",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entries"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "EntryTypes",
+			"item": [
+				{
+					"name": "/entry-types",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Söök",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "söögid-joogid",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entry-types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entry-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entry-types",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/entry-types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entry-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entry-types/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/entry-types/176da8ab-29aa-4db4-b05b-9633aa785b89",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entry-types",
+								"176da8ab-29aa-4db4-b05b-9633aa785b89"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{host}}/entry-types",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "4d948c39-d47b-4518-a242-2a19da85ed47",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "uus tüüp",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "uus tüübi kirjeldus 123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entry-types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entry-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/entry-types",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "4726156d-73ca-4cf0-971c-b911404380cf",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/entry-types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"entry-types"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
